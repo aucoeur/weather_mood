@@ -1,0 +1,17 @@
+ <div class="container">
+   <div class="left">
+     <form action="/" method="post">
+       <input name="city" type="text" placeholder="Enter a City" required>
+       <input name="mood" type="text" placeholder="I am feeling..." required>
+       <input id="button" type="submit" value="Get Weather">
+     </form>
+   </div>
+   
+   <div class="right">
+   {{#if location}}
+      {{{ location }}}
+   {{else}}
+      {{ error }}
+   {{/if}}
+   </div>
+ </div>

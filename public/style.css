@@ -1,0 +1,42 @@
+body {
+    font-family: 'Exo 2';
+    font-size: 2em;
+    width: 800px;
+}
+
+.container {
+    margin: 35px;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    max-width: 400px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+#button {
+    padding: 5px;
+    border: 1px solid black;
+    background-color: blue;
+    color: white;
+    width: 300px;
+    font-size: 1.2em;
+    align-self: center;
+}
+
+input {
+    width: 300px;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
