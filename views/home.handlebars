@@ -1,3 +1,4 @@
+ <div class="header"><h1>WeatherMood</h1></div>
  <div class="container">
    <div class="left">
      <form action="/" method="post">
@@ -15,8 +16,11 @@
    {{/if}}
    </div>
  </div>
+ <div class="header">
    <h2>Recently added:</h2>
- <div class="container">
+
+ </div>
+ <div class="flex-container">
    {{# each locations }}
       <div class="entry">
           <small>Date: {{ this.added }}</small><br />
