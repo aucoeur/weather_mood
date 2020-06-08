@@ -8,7 +8,18 @@ const request = require('request');
 const mongoose = require("mongoose");
 assert = require("assert");
 
-const url = process.env.MONGODB_URI;
+
+
+// const url = process.env.MONGODB_URI;
+const {
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
+  MONGO_HOSTNAME,
+  MONGO_PORT,
+  MONGO_DB
+} = process.env;
+
+const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 mongoose.Promise = global.Promise;
 mongoose.connect(
         url, {
@@ -23,7 +34,7 @@ mongoose.connect(
         console.log(err);
         // db.close(); // turn on for testing
     });
-    
+
 mongoose.connection.on("error", console.error.bind(console, "MongoDB connection Error:"));
 mongoose.set("debug", true);
 
