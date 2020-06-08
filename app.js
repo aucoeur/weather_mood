@@ -52,7 +52,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.get('/', (req, res) => {
-    WeatherMood.find().lean().limit(5)
+    WeatherMood.find().lean().sort({added:-1}).limit(12)
         .exec(function (err, locations) {
             res.render('home', {
                 locations: locations
@@ -92,7 +92,7 @@ app.post('/', (req, res) => {
 
                 let weatherText = `It's ${location.main.temp} °F in ${location.name}.<br /><br />You're feeling ${mood}.`
 
-                WeatherMood.find().lean().sort({$natural:-1}).limit(12)
+                WeatherMood.find().lean().sort({added:-1}).limit(12)
                     .exec(function (err, locations) {
                         res.render('home', {
                             location: weatherText,
