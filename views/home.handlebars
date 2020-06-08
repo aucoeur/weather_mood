@@ -15,3 +15,14 @@
    {{/if}}
    </div>
  </div>
+   <h2>Recently added:</h2>
+ <div class="container">
+   {{# each locations }}
+      <div class="entry">
+          <small>Date: {{ this.added }}</small><br />
+          Location: {{ this.location }}<br />
+          Temperature: {{ this.temperature }}°F <br />
+          Mood: {{ this.mood }}<br />
+      </div>
+  {{/each}}
+ </div>

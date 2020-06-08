@@ -10,19 +10,20 @@ assert = require("assert");
 
 
 
-// const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI;
 const {
-  MONGO_USERNAME,
-  MONGO_PASSWORD,
-  MONGO_HOSTNAME,
-  MONGO_PORT,
-  MONGO_DB
+    MONGO_USERNAME,
+    MONGO_PASSWORD,
+    MONGO_HOSTNAME,
+    MONGO_PORT,
+    MONGO_DB
 } = process.env;
 
-const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
+// const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 mongoose.Promise = global.Promise;
 mongoose.connect(
         url, {
+            // userMongoClient: true,
             useNewUrlParser: true,
             useFindAndModify: false,
             useCreateIndex: true,
@@ -51,7 +52,12 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.get('/', (req, res) => {
-    res.render('home');
+    WeatherMood.find().lean().limit(5)
+        .exec(function (err, locations) {
+            res.render('home', {
+                locations: locations
+            });
+        });
 });
 
 app.post('/', (req, res) => {
@@ -68,29 +74,33 @@ app.post('/', (req, res) => {
             });
         } else {
             let location = JSON.parse(body)
-            if (location.main == undefined) {
+            if (location.main == undefined || location.cod === "404") {
                 res.render('home', {
                     location: null,
                     error: 'Uh oh, something didn\'t happen.  Please try again.'
                 });
             } else {
-                let weatherText = `It's ${location.main.temp} °F in ${location.name}.<br /><br />You're feeling ${mood}.`
-                res.render('home', {
-                    location: weatherText,
-                    error: null
+                const weatherMood = new WeatherMood({
+                    added: Date(),
+                    location: location.name,
+                    temperature: location.main.temp,
+                    mood: mood
                 })
+
+                weatherMood.save()
+                console.log(weatherMood)
+
+                let weatherText = `It's ${location.main.temp} °F in ${location.name}.<br /><br />You're feeling ${mood}.`
+
+                WeatherMood.find().lean().limit(5)
+                    .exec(function (err, locations) {
+                        res.render('home', {
+                            location: weatherText,
+                            error: null,
+                            locations: locations
+                        });
+                    });
             }
-            const weatherMood = new WeatherMood({
-                added: Date(),
-                location: location.name,
-                temperature: location.main.temp,
-                mood: mood
-            })
-
-            weatherMood.save();
-
-            console.log(weatherMood)
-
         }
     })
 
